@@ -1,8 +1,11 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:ciocio_team_generator/icon_assets.dart';
 import 'package:ciocio_team_generator/player.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 
 void main() => runApp(MyApp());
@@ -12,6 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
@@ -29,55 +33,56 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  double deviceWith;
-  double deviceHeight;
-
   int stableNum = 4;
+  List<Player> players;
+  bool shrink = false;
 
   final TextEditingController _numOfPlayersController =
       new TextEditingController(text: "4");
 
+  final FocusNode _focusNode = FocusNode();
+
   static final formKey = GlobalKey<FormState>();
 
-  //called after init state because context in init state throws error
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    deviceWith = MediaQuery.of(context).size.width;
-    deviceHeight = MediaQuery.of(context).size.height;
+  void initState() {
+    super.initState();
+    _generatePlayers();
+    _focusNode.addListener(_focusNodeListener);
+  }
+
+  Future<Null> _focusNodeListener() async {
+    setState(() {
+      shrink = _isKeyboardHidden();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Player> players = _generatePlayers();
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
+      body: GestureDetector(
+        onPanUpdate: (details) {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (details.delta.dy > 0) {
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          }
+        },
         child: Container(
-          width: deviceWith,
-          height: deviceHeight,
+          width: _deviceWidth(),
+          height: _deviceHeight(),
           color: Color(0xff21295C),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  _teamColumn(players[0], players[1], isOnLeftSide: true),
-                  SvgPicture.asset(
-                    "assets/ciocioBoard.svg",
-                    width: deviceWith / 3,
-                    height: deviceHeight / 3,
-                  ),
-                  _teamColumn(players[2], players[3], isOnLeftSide: false)
-                ],
-              ),
+              _playZone(),
               _inputFormRow(),
             ],
           ),
@@ -86,6 +91,36 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget _playZone() {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      width: shrink ? _deviceWidth() / 2 : _deviceWidth(),
+      height: shrink ? _deviceHeight() / 6 : _deviceHeight() / 3,
+      curve: Curves.linear,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: _teamColumn(players[0], players[1], isOnLeftSide: true),
+          ),
+          Expanded(
+            flex: 2,
+            child: SvgPicture.asset(
+              "assets/ciocioBoard.svg",
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: _teamColumn(players[2], players[3], isOnLeftSide: false),
+          )
+        ],
+      ),
+    );
+  }
+
+  // TODO fix page redraw when input is focused / unfocused
   Widget _inputFormRow() {
     return Form(
       key: formKey,
@@ -93,9 +128,10 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          SizedBox(
-            width: deviceWith / 3,
+          Flexible(
+            flex: 1,
             child: TextFormField(
+              focusNode: _focusNode,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
               controller: _numOfPlayersController,
@@ -115,10 +151,10 @@ class _MyHomePageState extends State<MyHomePage> {
               validator: (value) => _validateInput(value),
             ),
           ),
-          SizedBox(
-            width: deviceWith / 3,
-            height: 60,
+          Flexible(
+            flex: 2,
             child: RaisedButton(
+              padding: EdgeInsets.all(20.0),
               shape: RoundedRectangleBorder(
                 borderRadius: new BorderRadius.circular(24.0),
               ),
@@ -130,7 +166,13 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               onPressed: () async {
                 if (formKey.currentState.validate()) {
-                  setState(() {});
+                  setState(() {
+                    _generatePlayers();
+                    if (!_isKeyboardHidden()) {
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      _focusNode.unfocus();
+                    }
+                  });
                 }
               },
             ),
@@ -143,38 +185,48 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget _teamColumn(Player player1, Player player2,
       {bool isOnLeftSide = true}) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        _playerWidget(player1.id, player1.icon, isOnLeftSide: isOnLeftSide),
-        _playerWidget(player2.id, player2.icon, isOnLeftSide: isOnLeftSide),
+        Flexible(
+            child: _playerWidget(player1.id, player1.icon,
+                isOnLeftSide: isOnLeftSide)),
+        Flexible(
+            child: _playerWidget(player2.id, player2.icon,
+                isOnLeftSide: isOnLeftSide)),
       ],
     );
   }
 
   Widget _playerWidget(int id, String iconPath, {bool isOnLeftSide = true}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: <Widget>[
-        Transform(
-          alignment: FractionalOffset.center,
-          transform: Matrix4.identity()..rotateY(isOnLeftSide ? 0 : pi),
-          child: SvgPicture.asset(
-            iconPath,
-            width: deviceWith / 6,
-            height: deviceHeight / 6,
+    return Container(
+      // padding: EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Transform(
+              alignment: FractionalOffset.center,
+              transform: Matrix4.identity()..rotateY(isOnLeftSide ? 0 : pi),
+              child: SvgPicture.asset(
+                iconPath,
+              ),
+            ),
           ),
-        ),
-        Text(
-          "#$id",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        )
-      ],
+          Flexible(
+            child: Text(
+              "#$id",
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -207,7 +259,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return null;
   }
 
-  List<Player> _generatePlayers() {
+  void _generatePlayers() {
     if (_validateInput(_numOfPlayersController.text) == null) {
       stableNum = int.parse(_numOfPlayersController.text);
     }
@@ -220,7 +272,22 @@ class _MyHomePageState extends State<MyHomePage> {
         (int index) =>
             Player(id: index + 1, icon: assets[index + 1], name: ""));
     playerList.shuffle(Random.secure());
-    return playerList;
+
+    players = playerList.take(stableNum).toList();
+  }
+
+  bool _isKeyboardHidden() {
+    return MediaQuery.of(context).viewInsets.bottom == 0;
+  }
+
+  double _deviceWidth() {
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    return Platform.isIOS ? deviceWidth / 2 : deviceWidth;
+  }
+
+  double _deviceHeight() {
+    final double deviceHeight = MediaQuery.of(context).size.height;
+    return Platform.isIOS ? deviceHeight / 2 : deviceHeight;
   }
 
   bool _isInt(String s) {
