@@ -11,11 +11,13 @@ dependencies:
     sdk: flutter
   flutter_svg: ^0.17.1
   cupertino_icons: ^0.1.2
-  flutter_launcher_icons: ^0.7.4
+  shared_preferences: ^0.5.4+3
+  keyboard_visibility: ^0.5.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.4
 
 
 #  run these for app icon update
