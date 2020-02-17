@@ -82,6 +82,7 @@ class _HomePageState extends State<HomePage> {
       centerTitle: true,
       actions: <Widget>[
         PopupMenuButton<String>(
+          color: Color(0xff21295C),
           onSelected: _selectChoice,
           itemBuilder: (BuildContext context) {
             return _choices.map((choice) {
@@ -535,7 +536,13 @@ class _PlayerCheckState extends State<PlayerCheck> {
 
                   return Container(
                     color: Color(0xff21295C),
-                    child: ListView.builder(
+                    child: ListView.separated(
+                      separatorBuilder: (context, index) => Divider(
+                        color: Colors.orangeAccent,
+                        thickness: 2,
+                        indent: 24,
+                        endIndent: 24,
+                      ),
                       itemCount: playerList.length,
                       itemBuilder: (context, position) {
                         return CheckboxListTile(
@@ -574,8 +581,13 @@ class _PlayerCheckState extends State<PlayerCheck> {
                         valueListenable: _playerList,
                         builder: (context, playerList, _) {
                           return Text(
-                              playerList.length == 0 ? 'Add players' : 'Save');
+                            playerList.length == 0 ? 'Add players' : 'Save',
+                            style: TextStyle(
+                              color: Colors.yellowAccent,
+                            ),
+                          );
                         }),
+                    color: Colors.deepPurple,
                     onPressed: () async {
                       if (_playerList.value.length == 0) {
                         Navigator.pushNamed(context, '/players').then((value) =>
