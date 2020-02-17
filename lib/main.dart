@@ -45,11 +45,36 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,
       routes: {
-        '/': (context) => HomePage(
-              title: 'Team Generator',
+        '/': (context) => KeyboardDragDownDismiss(
+              child: HomePage(
+                title: 'Team Generator',
+              ),
             ),
-        '/players': (context) => PlayersPage(),
+        '/players': (context) => KeyboardDragDownDismiss(child: PlayersPage()),
       },
     );
+  }
+}
+
+class KeyboardDragDownDismiss extends StatelessWidget {
+  final Widget child;
+
+  KeyboardDragDownDismiss({this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return this.child == null
+        ? Container()
+        : GestureDetector(
+            onPanUpdate: (details) {
+              FocusScopeNode currentFocus = FocusScope.of(context);
+
+              if (details.delta.dy > 0) {
+                if (!currentFocus.hasPrimaryFocus) {
+                  currentFocus.unfocus();
+                }
+              }
+            },
+            child: this.child);
   }
 }

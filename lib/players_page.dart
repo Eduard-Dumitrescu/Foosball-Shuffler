@@ -1,7 +1,6 @@
-import 'dart:io';
-
 import 'package:ciocio_team_generator/player.dart';
 import 'package:ciocio_team_generator/player_service.dart';
+import 'package:ciocio_team_generator/utils.dart';
 import 'package:flutter/material.dart';
 
 class PlayersPage extends StatefulWidget {
@@ -12,17 +11,17 @@ class PlayersPage extends StatefulWidget {
 }
 
 class _PlayersPageState extends State<PlayersPage> {
+  static final formKey = GlobalKey<FormState>();
+
   final ValueNotifier<List<Player>> _playerList =
       ValueNotifier<List<Player>>(List<Player>());
-  final TextEditingController _playerName = new TextEditingController();
+  final TextEditingController _playerName = TextEditingController(text: "");
 
   @override
   void initState() {
     super.initState();
     _loadPlayers();
   }
-
-  String name = "";
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +31,8 @@ class _PlayersPageState extends State<PlayersPage> {
           centerTitle: true,
         ),
         body: Container(
-          width: _deviceWidth(),
-          height: _deviceHeight(),
+          width: Utils.deviceWidth(context),
+          height: Utils.deviceHeight(context),
           color: Color(0xff21295C),
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -63,25 +62,32 @@ class _PlayersPageState extends State<PlayersPage> {
               ),
               Flexible(
                 flex: 1,
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.number,
-                  style: TextStyle(color: Colors.yellow, fontSize: 16),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(24.0),
+                child: Form(
+                  key: formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextFormField(
+                      controller: _playerName,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.yellow, fontSize: 16),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(24.0),
+                          ),
+                        ),
+                        errorMaxLines: 10,
+                        hintText: "Player name",
+                        hintStyle: TextStyle(color: Colors.yellow),
+                        filled: true,
+                        fillColor: Colors.deepPurple,
                       ),
+                      validator: (value) {
+                        if (value.isEmpty) return "Please enter a player name";
+                        return null;
+                      },
                     ),
-                    errorMaxLines: 10,
-                    hintText: "Player name",
-                    hintStyle: TextStyle(color: Colors.yellow),
-                    filled: true,
-                    fillColor: Colors.deepPurple,
                   ),
-                  onChanged: (data) async {
-                    _playerName.value = TextEditingValue(text: data);
-                  },
                 ),
               ),
               Flexible(
@@ -89,8 +95,12 @@ class _PlayersPageState extends State<PlayersPage> {
                 child: RaisedButton(
                   child: Text("Add guy"),
                   onPressed: () async {
-                    await PlayerService.addPlayer(_playerName.text);
-                    _loadPlayers();
+                    if (formKey.currentState.validate()) {
+                      await PlayerService.addPlayer(_playerName.text);
+                      _playerName.clear();
+                      _loadPlayers();
+                      Utils.dismissKeyboard(context);
+                    }
                   },
                 ),
               ),
@@ -112,16 +122,6 @@ class _PlayersPageState extends State<PlayersPage> {
   void _loadPlayers() {
     PlayerService.getPlayerList()
         .then((players) => _playerList.value = players);
-  }
-
-  double _deviceWidth() {
-    final double deviceWidth = MediaQuery.of(context).size.width;
-    return Platform.isIOS ? deviceWidth / 2 : deviceWidth;
-  }
-
-  double _deviceHeight() {
-    final double deviceHeight = MediaQuery.of(context).size.height;
-    return Platform.isIOS ? deviceHeight / 2 : deviceHeight;
   }
 
   @override

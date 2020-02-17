@@ -68,9 +68,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(),
-      body: _mainBody(),
+    return Center(
+      child: Scaffold(
+        appBar: _appBar(),
+        body: _mainBody(),
+      ),
     );
   }
 
@@ -99,95 +101,82 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _mainBody() {
-    return GestureDetector(
-        onPanUpdate: (details) {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-
-          if (details.delta.dy > 0) {
-            if (!currentFocus.hasPrimaryFocus) {
-              currentFocus.unfocus();
-            }
-          }
-        },
-        child: Container(
-          width: Utils.deviceWidth(context),
-          height: Utils.deviceHeight(context),
-          color: Color(0xff21295C),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                flex: 5,
-                child: _playZone(),
-              ),
-              ValueListenableBuilder<String>(
-                  valueListenable: _playersError,
-                  builder: (context, errorString, _) {
-                    return errorString.isEmpty
-                        ? Container()
-                        : Flexible(
-                            //flex: 1,
-                            child: Center(
-                              child: Text(
-                                errorString,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
+    return Container(
+      width: Utils.deviceWidth(context),
+      height: Utils.deviceHeight(context),
+      color: Color(0xff21295C),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 5,
+            child: _playZone(),
+          ),
+          ValueListenableBuilder<String>(
+              valueListenable: _playersError,
+              builder: (context, errorString, _) {
+                return errorString.isEmpty
+                    ? Container()
+                    : Flexible(
+                        //flex: 1,
+                        child: Center(
+                          child: Text(
+                            errorString,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
-                          );
-                  }),
-              Flexible(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: _inputFormRow(),
-                ),
-              ),
-              Flexible(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: SizedBox(
-                    width: Utils.deviceWidth(context),
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(24.0),
-                      ),
-                      color: Colors.deepPurple,
-                      child: Text(
-                        "Generate Team",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.yellow,
-                          fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      onPressed: () async {
-                        if (_teamType.value == TeamType.Names) {
-                          _getNamedPlayers();
-                        } else {
-                          _playersError.value = "";
-                          if (formKey.currentState.validate()) {
-                            _generateNumberedPlayers();
-                            if (!_isKeyboardHidden()) {
-                              SystemChannels.textInput
-                                  .invokeMethod('TextInput.hide');
-                            }
-                          }
-                        }
-                      },
+                      );
+              }),
+          Flexible(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _inputFormRow(),
+            ),
+          ),
+          Flexible(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: SizedBox(
+                width: Utils.deviceWidth(context),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(24.0),
+                  ),
+                  color: Colors.deepPurple,
+                  child: Text(
+                    "Generate Team",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.yellow,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                  onPressed: () async {
+                    if (_teamType.value == TeamType.Names) {
+                      _getNamedPlayers();
+                    } else {
+                      _playersError.value = "";
+                      if (formKey.currentState.validate()) {
+                        _generateNumberedPlayers();
+                        Utils.dismissKeyboard(context);
+                      }
+                    }
+                  },
                 ),
-              )
-            ],
-          ),
-        ));
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Widget _playZone() {
@@ -476,10 +465,6 @@ class _HomePageState extends State<HomePage> {
     playerList.shuffle(Random.secure());
 
     _players.value = playerList.take(4).toList();
-  }
-
-  bool _isKeyboardHidden() {
-    return MediaQuery.of(context).viewInsets.bottom == 0;
   }
 
   bool _isInt(String s) {
