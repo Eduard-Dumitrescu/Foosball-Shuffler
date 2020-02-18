@@ -110,17 +110,14 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Expanded(
-            flex: 5,
-            child: _playZone(),
-          ),
+          _playZone(),
           ValueListenableBuilder<String>(
               valueListenable: _playersError,
               builder: (context, errorString, _) {
                 return errorString.isEmpty
                     ? Container()
                     : Flexible(
-                        //flex: 1,
+                        flex: 1,
                         child: Center(
                           child: Text(
                             errorString,
@@ -194,32 +191,35 @@ class _HomePageState extends State<HomePage> {
           return ValueListenableBuilder<List<Player>>(
               valueListenable: _players,
               builder: (context, players, _) {
-                return AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  width: width,
-                  height: height,
-                  curve: Curves.linear,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Expanded(
-                        flex: 1,
-                        child: _teamColumn(players[0], players[1],
-                            isOnLeftSide: true),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: SvgPicture.asset(
-                          "assets/ciocioBoard.svg",
+                return Expanded(
+                  flex: shrink ? 3 : 5,
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 200),
+                    width: width,
+                    height: height,
+                    curve: Curves.linear,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: _teamColumn(players[0], players[1],
+                              isOnLeftSide: true),
                         ),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: _teamColumn(players[2], players[3],
-                            isOnLeftSide: false),
-                      )
-                    ],
+                        Expanded(
+                          flex: 2,
+                          child: SvgPicture.asset(
+                            "assets/ciocioBoard.svg",
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: _teamColumn(players[2], players[3],
+                              isOnLeftSide: false),
+                        )
+                      ],
+                    ),
                   ),
                 );
               });
@@ -241,27 +241,25 @@ class _HomePageState extends State<HomePage> {
                 child: ListTile(
                   title: Form(
                     key: formKey,
-                    child: SizedBox(
-                      height: 40,
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        keyboardType: TextInputType.number,
-                        controller: _numOfPlayersController,
-                        style: TextStyle(color: Colors.yellow, fontSize: 16),
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: const BorderRadius.all(
-                              const Radius.circular(24.0),
-                            ),
+                    child: TextFormField(
+                      textAlign: TextAlign.center,
+                      keyboardType: TextInputType.number,
+                      controller: _numOfPlayersController,
+                      style: TextStyle(color: Colors.yellow, fontSize: 16),
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(8.0),
+                        border: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(24.0),
                           ),
-                          errorMaxLines: 10,
-                          hintText: "Players",
-                          hintStyle: TextStyle(color: Colors.yellow),
-                          filled: true,
-                          fillColor: Colors.deepPurple,
                         ),
-                        validator: (value) => _validateInput(value),
+                        errorMaxLines: 10,
+                        hintText: "Players",
+                        hintStyle: TextStyle(color: Colors.yellow),
+                        filled: true,
+                        fillColor: Colors.deepPurple,
                       ),
+                      validator: (value) => _validateInput(value),
                     ),
                   ),
                   leading: Radio(
@@ -401,9 +399,9 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 "$name",
-                overflow: TextOverflow.clip,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: _shrink.value ? 8 : 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
