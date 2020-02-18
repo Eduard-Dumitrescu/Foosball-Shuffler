@@ -543,23 +543,28 @@ class _PlayerCheckState extends State<PlayerCheck> {
                       ),
                       itemCount: playerList.length,
                       itemBuilder: (context, position) {
-                        return CheckboxListTile(
-                          checkColor: Colors.indigo,
-                          title: Text(
-                            playerList[position].name,
-                            textAlign: TextAlign.center,
-                          ),
-                          value: playerList[position].isPlaying,
-                          onChanged: (bool value) async {
-                            playerList[position].isPlaying = value;
-                            var auxPlayerList = List<Player>();
-                            auxPlayerList.addAll(playerList);
-                            _playerList.value = auxPlayerList;
-                          },
-                          secondary: AspectRatio(
-                            aspectRatio: 3.0 / 4.0,
-                            child: SvgPicture.asset(
-                              playerList[position].icon,
+                        return Material(
+                          color: Colors.white.withOpacity(0),
+                          child: InkWell(
+                            child: CheckboxListTile(
+                              checkColor: Colors.indigo,
+                              title: Text(
+                                playerList[position].name,
+                                textAlign: TextAlign.center,
+                              ),
+                              value: playerList[position].isPlaying,
+                              onChanged: (bool value) async {
+                                playerList[position].isPlaying = value;
+                                var auxPlayerList = List<Player>();
+                                auxPlayerList.addAll(playerList);
+                                _playerList.value = auxPlayerList;
+                              },
+                              secondary: AspectRatio(
+                                aspectRatio: 3.0 / 4.0,
+                                child: SvgPicture.asset(
+                                  playerList[position].icon,
+                                ),
+                              ),
                             ),
                           ),
                         );

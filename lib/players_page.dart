@@ -61,15 +61,21 @@ class _PlayersPageState extends State<PlayersPage> {
                           ),
                           itemCount: playerList.length,
                           itemBuilder: (context, position) {
-                            return ListTile(
-                              title: Text(
-                                playerList[position].name,
-                                textAlign: TextAlign.center,
-                              ),
-                              leading: AspectRatio(
-                                aspectRatio: 3.0 / 4.0,
-                                child: SvgPicture.asset(
-                                  playerList[position].icon,
+                            return Material(
+                              color: Colors.white.withOpacity(0),
+                              child: InkWell(
+                                child: ListTile(
+                                  onTap: () async {},
+                                  title: Text(
+                                    playerList[position].name,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  leading: AspectRatio(
+                                    aspectRatio: 3.0 / 4.0,
+                                    child: SvgPicture.asset(
+                                      playerList[position].icon,
+                                    ),
+                                  ),
                                 ),
                               ),
                             );

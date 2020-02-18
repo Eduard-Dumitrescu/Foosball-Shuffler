@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         unselectedWidgetColor: Colors.yellowAccent,
         toggleableActiveColor: Colors.yellowAccent,
         dividerColor: Colors.amber,
+        splashColor: Colors.deepOrangeAccent,
         //primarySwatch: Colors.deepPurple,
 
         // Define the default font family.
