@@ -34,10 +34,28 @@ class PlayerService {
     if (playerList.length == IconAssets.assets.length)
       return "Cannot add anymore players";
 
-    playerList.add(Player(
-        id: playerList.length + 1,
-        name: name,
-        icon: icon ?? IconAssets.assets[playerList.length]));
+    if (playerList
+            .where((Player player) =>
+                player.name.toLowerCase() == name.toLowerCase())
+            .length >
+        0) return "A player with that name already exists";
+
+    if (name.toLowerCase() == "cezara") icon = IconAssets.icon051Monkey;
+
+    int assetIndex = playerList.length;
+    if (IconAssets.assets[assetIndex].toLowerCase() ==
+        IconAssets.icon051Monkey.toLowerCase()) {
+      final bool mowgliExists = playerList
+              .where((Player player) =>
+                  player.icon.toLowerCase() ==
+                  IconAssets.icon051Monkey.toLowerCase())
+              .length >
+          0;
+      assetIndex = mowgliExists ? assetIndex + 1 : assetIndex;
+    }
+    icon = icon ?? IconAssets.assets[assetIndex];
+
+    playerList.add(Player(id: playerList.length + 1, name: name, icon: icon));
 
     await Repo.setString(PLAYER_LIST, jsonEncode(playerList));
 
