@@ -1,3 +1,4 @@
+import 'package:ciocio_team_generator/icon_assets.dart';
 import 'package:ciocio_team_generator/player.dart';
 import 'package:ciocio_team_generator/player_service.dart';
 import 'package:ciocio_team_generator/utils.dart';
@@ -33,7 +34,7 @@ class _PlayersPageState extends State<PlayersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Go Bananas"),
+          title: Text("Players Settings"),
           centerTitle: true,
         ),
         body: Container(
@@ -65,7 +66,11 @@ class _PlayersPageState extends State<PlayersPage> {
                               color: Colors.white.withOpacity(0),
                               child: InkWell(
                                 child: ListTile(
-                                  onTap: () async {},
+                                  onTap: () async {
+                                    final bool result = await _showPlayerDialog(
+                                        _playerList.value[position]);
+                                    if (result != null) _loadPlayers();
+                                  },
                                   title: Text(
                                     playerList[position].name,
                                     textAlign: TextAlign.center,
@@ -109,6 +114,10 @@ class _PlayersPageState extends State<PlayersPage> {
                       ),
                       validator: (value) {
                         if (value.isEmpty) return "Please enter a player name";
+                        if (_playerList.value.indexWhere((player) =>
+                                player.name.toLowerCase() ==
+                                value.toLowerCase()) !=
+                            -1) return "Player with given name already exists";
                         return null;
                       },
                     ),
@@ -149,7 +158,7 @@ class _PlayersPageState extends State<PlayersPage> {
           ),
           color: Colors.deepPurple,
           child: Text(
-            "Add guy",
+            "Add Player",
             style: TextStyle(
               fontSize: 16,
               color: Colors.yellow,
@@ -190,6 +199,16 @@ class _PlayersPageState extends State<PlayersPage> {
     ];
   }
 
+  Future<bool> _showPlayerDialog(Player player) async {
+    return showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: PlayerEditWidget(player),
+          );
+        });
+  }
+
   void _loadPlayers() {
     PlayerService.getPlayerList()
         .then((players) => _playerList.value = players);
@@ -200,5 +219,210 @@ class _PlayersPageState extends State<PlayersPage> {
     super.dispose();
     _playerList.dispose();
     _playerName.dispose();
+  }
+}
+
+class PlayerEditWidget extends StatefulWidget {
+  final Player player;
+
+  PlayerEditWidget(this.player);
+
+  @override
+  _PlayerEditWidgetState createState() => _PlayerEditWidgetState();
+}
+
+class _PlayerEditWidgetState extends State<PlayerEditWidget> {
+  static final formKey = GlobalKey<FormState>();
+
+  final TextEditingController _playerName = TextEditingController(text: "");
+  final ValueNotifier<String> _iconPath = ValueNotifier<String>("");
+
+  List<Player> _playerList;
+  List<String> _iconList;
+  bool isMowgli;
+
+  @override
+  void initState() {
+    super.initState();
+    _iconList = IconAssets.assets;
+    _playerName.text = widget.player.name;
+    _iconPath.value = widget.player.icon;
+    isMowgli = widget.player.name.toLowerCase() == "cezara";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<Player>>(
+        future: PlayerService.getPlayerList(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            _playerList = snapshot.data;
+            _iconList.removeWhere((iconPath) =>
+                _playerList.indexWhere((player) => player.icon == iconPath) !=
+                -1);
+            _iconList.remove(IconAssets.icon051Monkey);
+
+            return Container(
+              color: Color(0xff21295C),
+              width: Utils.deviceWidth(context),
+              height: Utils.deviceHeight(context) / (isMowgli ? 3 : 2),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: ValueListenableBuilder<String>(
+                        valueListenable: _iconPath,
+                        builder: (context, iconPath, _) {
+                          return AspectRatio(
+                            aspectRatio: 16.0 / 9.0,
+                            child: SvgPicture.asset(
+                              iconPath,
+                            ),
+                          );
+                        }),
+                  ),
+                  isMowgli ? Container() : _iconListWidget(),
+                  isMowgli
+                      ? Container()
+                      : Flexible(
+                          flex: 1,
+                          child: Container(
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 32.0),
+                            child: Form(
+                              key: formKey,
+                              child: TextFormField(
+                                controller: _playerName,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.yellow, fontSize: 16),
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.all(8.0),
+                                  border: OutlineInputBorder(
+                                    borderRadius: const BorderRadius.all(
+                                      const Radius.circular(24.0),
+                                    ),
+                                  ),
+                                  errorMaxLines: 10,
+                                  hintText: "Player name",
+                                  hintStyle: TextStyle(color: Colors.yellow),
+                                  filled: true,
+                                  fillColor: Colors.deepPurple,
+                                ),
+                                validator: (value) {
+                                  if (value.isEmpty)
+                                    return "Please enter a player name";
+                                  if (value != widget.player.name &&
+                                      _playerList.indexWhere((player) =>
+                                              player.name.toLowerCase() ==
+                                              value.toLowerCase()) !=
+                                          -1)
+                                    return "Player with given name already exists";
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                  isMowgli
+                      ? Container()
+                      : Flexible(
+                          flex: 1,
+                          child: Container(
+                            width: Utils.deviceWidth(context) / 2,
+                            child: RaisedButton(
+                                child: Text(
+                                  'Save Changes',
+                                  style: TextStyle(
+                                    color: Colors.yellowAccent,
+                                  ),
+                                ),
+                                color: Colors.deepPurple,
+                                onPressed: () async {
+                                  if (formKey.currentState.validate()) {
+                                    if (_iconPath.value != widget.player.icon ||
+                                        _playerName.text !=
+                                            widget.player.name) {
+                                      final int index =
+                                          _playerList.indexOf(widget.player);
+                                      _playerList[index].name =
+                                          _playerName.text;
+                                      _playerList[index].icon =
+                                          _playerName.text.toLowerCase() ==
+                                                  "cezara"
+                                              ? IconAssets.icon051Monkey
+                                              : _iconPath.value;
+                                      await PlayerService.savePlayers(
+                                          _playerList);
+                                    }
+                                    Navigator.pop(context, true);
+                                  }
+                                }),
+                          ),
+                        ),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      width: Utils.deviceWidth(context) / 2,
+                      child: RaisedButton(
+                          child: Text(
+                            'Delete Player',
+                            style: TextStyle(
+                              color: Colors.yellowAccent,
+                            ),
+                          ),
+                          color: Colors.deepPurple,
+                          onPressed: () async {
+                            await PlayerService.deletePlayer(widget.player.id);
+                            Navigator.pop(context, true);
+                          }),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          } else {
+            return Container();
+          }
+        });
+  }
+
+  Widget _iconListWidget() {
+    return (IconAssets.assets.length - _playerList.length) < 3
+        ? Container()
+        : Flexible(
+            flex: 1,
+            child: ListView.separated(
+              separatorBuilder: (context, index) => VerticalDivider(
+                color: Colors.orangeAccent,
+                thickness: 2,
+              ),
+              scrollDirection: Axis.horizontal,
+              itemCount: _iconList.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Material(
+                  color: Colors.white.withOpacity(0),
+                  child: InkWell(
+                    onTap: () async => _iconPath.value = _iconList[index],
+                    child: AspectRatio(
+                      aspectRatio: 16.0 / 9.0,
+                      child: SvgPicture.asset(
+                        _iconList[index],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _playerName.dispose();
+    _iconPath.dispose();
   }
 }

@@ -1,7 +1,7 @@
 class Player {
   final int id;
-  final String name;
-  final String icon;
+  String name;
+  String icon;
   bool isPlaying;
 
   Player({this.id, this.name, this.icon, this.isPlaying = false});
@@ -21,4 +21,18 @@ class Player {
         'icon': icon,
         'isPlaying': isPlaying,
       };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Player &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          icon == other.icon &&
+          name == other.name &&
+          isPlaying == other.isPlaying;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^ icon.hashCode ^ name.hashCode ^ isPlaying.hashCode;
 }
