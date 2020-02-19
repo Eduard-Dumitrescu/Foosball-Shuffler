@@ -11,7 +11,6 @@ class IconAssets {
     'assets/icons/051-chameleon.svg',
     'assets/icons/051-chicken.svg',
     'assets/icons/051-clown-fish.svg',
-    'assets/icons/051-cobra.svg',
     'assets/icons/051-cow.svg',
     'assets/icons/051-crab.svg',
     'assets/icons/051-crocodile.svg',
@@ -43,7 +42,6 @@ class IconAssets {
     'assets/icons/051-sheep.svg',
     'assets/icons/051-siberian-husky.svg',
     'assets/icons/051-sloth.svg',
-    'assets/icons/051-snake.svg',
     'assets/icons/051-squirrel.svg',
     'assets/icons/051-swan.svg',
     'assets/icons/051-tiger.svg',
@@ -62,7 +60,6 @@ class IconAssets {
   static const String icon051Chameleon = 'assets/icons/051-chameleon.svg';
   static const String icon051Chicken = 'assets/icons/051-chicken.svg';
   static const String icon051ClownFish = 'assets/icons/051-clown-fish.svg';
-  static const String icon051Cobra = 'assets/icons/051-cobra.svg';
   static const String icon051Cow = 'assets/icons/051-cow.svg';
   static const String icon051Crab = 'assets/icons/051-crab.svg';
   static const String icon051Crocodile = 'assets/icons/051-crocodile.svg';
@@ -95,7 +92,6 @@ class IconAssets {
   static const String icon051SiberianHusky =
       'assets/icons/051-siberian-husky.svg';
   static const String icon051Sloth = 'assets/icons/051-sloth.svg';
-  static const String icon051Snake = 'assets/icons/051-snake.svg';
   static const String icon051Squirrel = 'assets/icons/051-squirrel.svg';
   static const String icon051Swan = 'assets/icons/051-swan.svg';
   static const String icon051Tiger = 'assets/icons/051-tiger.svg';
