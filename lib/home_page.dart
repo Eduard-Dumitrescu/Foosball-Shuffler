@@ -25,8 +25,6 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _numOfPlayersController =
       new TextEditingController(text: "4");
 
-  static final formKey = GlobalKey<FormState>();
-
   final ValueNotifier<TeamType> _teamType =
       ValueNotifier<TeamType>(TeamType.Numbers);
 
@@ -162,8 +160,10 @@ class _HomePageState extends State<HomePage> {
                     if (_teamType.value == TeamType.Names) {
                       _getNamedPlayers();
                     } else {
-                      _playersError.value = "";
-                      if (formKey.currentState.validate()) {
+                      _playersError.value =
+                          _validateInput(_numOfPlayersController.text) ?? "";
+                      if (_playersError.value.isEmpty) {
+                        _playersError.value = "";
                         _generateNumberedPlayers();
                         Utils.dismissKeyboard(context);
                       }
@@ -236,31 +236,26 @@ class _HomePageState extends State<HomePage> {
 
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Flexible(
                 child: ListTile(
-                  title: Form(
-                    key: formKey,
-                    child: TextFormField(
-                      textAlign: TextAlign.center,
-                      keyboardType: TextInputType.number,
-                      controller: _numOfPlayersController,
-                      style: TextStyle(color: Colors.yellow, fontSize: 16),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(8.0),
-                        border: OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            const Radius.circular(24.0),
-                          ),
+                  title: TextFormField(
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    controller: _numOfPlayersController,
+                    style: TextStyle(color: Colors.yellow, fontSize: 16),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(8.0),
+                      border: OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(
+                          const Radius.circular(24.0),
                         ),
-                        errorMaxLines: 10,
-                        hintText: "Players",
-                        hintStyle: TextStyle(color: Colors.yellow),
-                        filled: true,
-                        fillColor: Colors.deepPurple,
                       ),
-                      validator: (value) => _validateInput(value),
+                      hintText: "Players",
+                      hintStyle: TextStyle(color: Colors.yellow),
+                      filled: true,
+                      fillColor: Colors.deepPurple,
                     ),
                   ),
                   leading: Radio(
