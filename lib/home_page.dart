@@ -50,6 +50,11 @@ class _HomePageState extends State<HomePage> {
           Navigator.pushNamed(context, '/players');
         }
         break;
+      case "Contact":
+        {
+          Navigator.pushNamed(context, '/contact');
+        }
+        break;
     }
   }
 
@@ -520,11 +525,14 @@ class _PlayerCheckState extends State<PlayerCheck> {
                 valueListenable: _playerList,
                 builder: (context, playerList, _) {
                   if (playerList.length == 0)
-                    return Center(
-                      child: Text(
-                        "No players found. Maybe add some?",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 24),
+                    return Container(
+                      color: Color(0xff21295C),
+                      child: Center(
+                        child: Text(
+                          "No players found. Maybe add some?",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 24),
+                        ),
                       ),
                     );
 
