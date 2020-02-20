@@ -153,6 +153,7 @@ class _PlayersPageState extends State<PlayersPage> {
       Flexible(
         flex: 1,
         child: RaisedButton(
+          elevation: 8.0,
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(24.0),
           ),
@@ -178,6 +179,7 @@ class _PlayersPageState extends State<PlayersPage> {
       Flexible(
         flex: 1,
         child: RaisedButton(
+          elevation: 8.0,
           shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(24.0),
           ),
@@ -333,6 +335,7 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                           child: Container(
                             width: Utils.deviceWidth(context) / 2,
                             child: RaisedButton(
+                                elevation: 8.0,
                                 child: Text(
                                   'Save Changes',
                                   style: TextStyle(
@@ -367,6 +370,7 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                     child: Container(
                       width: Utils.deviceWidth(context) / 2,
                       child: RaisedButton(
+                          elevation: 8.0,
                           child: Text(
                             'Delete Player',
                             style: TextStyle(

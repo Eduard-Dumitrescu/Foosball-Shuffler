@@ -149,6 +149,7 @@ class _HomePageState extends State<HomePage> {
               child: SizedBox(
                 width: Utils.deviceWidth(context),
                 child: RaisedButton(
+                  elevation: 8.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(24.0),
                   ),
@@ -274,14 +275,16 @@ class _HomePageState extends State<HomePage> {
               Flexible(
                 child: ListTile(
                   title: RaisedButton(
+                    elevation: 8.0,
                     shape: RoundedRectangleBorder(
                       borderRadius: new BorderRadius.circular(24.0),
                     ),
                     color: Colors.deepPurple,
                     child: Text(
-                      "Select Players",
+                      "Pick Players",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 14.0,
                         color: Colors.yellow,
                         fontWeight: FontWeight.bold,
                       ),
@@ -584,6 +587,7 @@ class _PlayerCheckState extends State<PlayerCheck> {
               padding: const EdgeInsets.all(16.0),
               child: SizedBox.expand(
                 child: RaisedButton(
+                    elevation: 8.0,
                     child: ValueListenableBuilder<List<Player>>(
                         valueListenable: _playerList,
                         builder: (context, playerList, _) {
