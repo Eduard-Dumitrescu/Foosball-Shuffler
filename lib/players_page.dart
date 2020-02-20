@@ -4,6 +4,7 @@ import 'package:ciocio_team_generator/player_service.dart';
 import 'package:ciocio_team_generator/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 class PlayersPage extends StatefulWidget {
@@ -193,8 +194,42 @@ class _PlayersPageState extends State<PlayersPage> {
             ),
           ),
           onPressed: () async {
-            await PlayerService.deleteAllPlayers();
-            _loadPlayers();
+            showDialog<void>(
+              context: context,
+              barrierDismissible: false, // user must tap button!
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  backgroundColor: Color(0xff21295C),
+                  title: Text(
+                    'Delete all players?',
+                    style: TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.fredokaOne().fontFamily),
+                  ),
+                  content: Text(
+                    "Are you absolutely sure you want to delete everyone?",
+                    style: GoogleFonts.fredokaOne(),
+                  ),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('I guess not'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    FlatButton(
+                      child: Text('DID I STUTTER?'),
+                      onPressed: () async {
+                        await PlayerService.deleteAllPlayers();
+                        _loadPlayers();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
           },
         ),
       )
