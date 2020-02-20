@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:ciocio_team_generator/icon_assets.dart';
-import 'package:ciocio_team_generator/player.dart';
+import 'package:ciocio_team_generator/models/player.dart';
+import 'package:ciocio_team_generator/utils/icon_assets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlayerService {

@@ -1,7 +1,7 @@
-import 'package:ciocio_team_generator/icon_assets.dart';
-import 'package:ciocio_team_generator/player.dart';
-import 'package:ciocio_team_generator/player_service.dart';
-import 'package:ciocio_team_generator/utils.dart';
+import 'package:ciocio_team_generator/models/player.dart';
+import 'package:ciocio_team_generator/repo/player_service.dart';
+import 'package:ciocio_team_generator/utils/icon_assets.dart';
+import 'package:ciocio_team_generator/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';

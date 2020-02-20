@@ -1,7 +1,6 @@
-import 'package:ciocio_team_generator/players_page.dart';
+import 'package:ciocio_team_generator/ui/home_page.dart';
+import 'package:ciocio_team_generator/ui/players_page.dart';
 import 'package:flutter/material.dart';
-
-import 'home_page.dart';
 
 // will maybe use later
 class RouteGenerator {

@@ -1,7 +1,6 @@
-import 'package:ciocio_team_generator/contact_page.dart';
-import 'package:ciocio_team_generator/home_page.dart';
-import 'package:ciocio_team_generator/players_page.dart';
-import 'package:ciocio_team_generator/route_generator.dart';
+import 'package:ciocio_team_generator/ui/contact_page.dart';
+import 'package:ciocio_team_generator/ui/home_page.dart';
+import 'package:ciocio_team_generator/ui/players_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -58,7 +57,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialRoute: '/',
-      onGenerateRoute: RouteGenerator.generateRoute,
+      //onGenerateRoute: RouteGenerator.generateRoute,
       routes: {
         '/': (context) => KeyboardDragDownDismiss(
               child: HomePage(

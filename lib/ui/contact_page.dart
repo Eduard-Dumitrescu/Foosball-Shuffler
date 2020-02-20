@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:ciocio_team_generator/icon_assets.dart';
-import 'package:ciocio_team_generator/utils.dart';
+import 'package:ciocio_team_generator/utils/icon_assets.dart';
+import 'package:ciocio_team_generator/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
