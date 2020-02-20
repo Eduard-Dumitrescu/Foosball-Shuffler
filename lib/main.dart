@@ -5,15 +5,20 @@ import 'package:ciocio_team_generator/route_generator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  //force portrait only mode
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-      .then((_) {
+  if (Device.get().isTablet) {
     runApp(new MyApp());
-  });
+  } else {
+    //force portrait only mode
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+        .then((_) {
+      runApp(new MyApp());
+    });
+  }
 }
 
 class MyApp extends StatelessWidget {
