@@ -258,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       hintText: "Players",
-                      hintStyle: TextStyle(color: Colors.yellow),
+                      hintStyle: TextStyle(color: Colors.grey),
                       filled: true,
                       fillColor: Colors.deepPurple,
                     ),
