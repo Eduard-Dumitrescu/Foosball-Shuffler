@@ -3,9 +3,9 @@ import 'package:ciocio_team_generator/repo/player_service.dart';
 import 'package:ciocio_team_generator/utils/icon_assets.dart';
 import 'package:ciocio_team_generator/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 class PlayersPage extends StatefulWidget {
   const PlayersPage();
