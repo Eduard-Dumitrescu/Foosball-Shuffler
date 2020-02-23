@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         //primarySwatch: Colors.deepPurple,
 
         // Define the default font family.
-        fontFamily: GoogleFonts.sofia().fontFamily,
+        fontFamily: GoogleFonts.fredokaOne().fontFamily,
 
         // Define the default TextTheme. Use this to specify the default
         // text styling for headlines, titles, bodies of text, and more.
