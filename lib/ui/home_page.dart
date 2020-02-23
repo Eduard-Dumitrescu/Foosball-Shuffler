@@ -509,8 +509,10 @@ class _PlayerCheckState extends State<PlayerCheck> {
   @override
   void initState() {
     super.initState();
-    PlayerService.getPlayerList()
-        .then((players) => _playerList.value = players);
+    PlayerService.getPlayerList().then((players) {
+      players.sort((player1, player2) => player1.name.compareTo(player2.name));
+      _playerList.value = players;
+    });
   }
 
   @override

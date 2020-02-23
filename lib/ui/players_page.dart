@@ -247,8 +247,10 @@ class _PlayersPageState extends State<PlayersPage> {
   }
 
   void _loadPlayers() {
-    PlayerService.getPlayerList()
-        .then((players) => _playerList.value = players);
+    PlayerService.getPlayerList().then((players) {
+      players.sort((player1, player2) => player1.name.compareTo(player2.name));
+      _playerList.value = players;
+    });
   }
 
   @override
