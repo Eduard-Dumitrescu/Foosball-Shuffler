@@ -248,7 +248,8 @@ class _PlayersPageState extends State<PlayersPage> {
 
   void _loadPlayers() {
     PlayerService.getPlayerList().then((players) {
-      players.sort((player1, player2) => player1.name.compareTo(player2.name));
+      players.sort((player1, player2) =>
+          player1.name.toLowerCase().compareTo(player2.name.toLowerCase()));
       _playerList.value = players;
     });
   }
@@ -353,6 +354,9 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
                                 validator: (value) {
                                   if (value.isEmpty)
                                     return "Please enter a player name";
+                                  if (value.toLowerCase() ==
+                                      _playerName.text.toLowerCase())
+                                    return null;
                                   if (value != widget.player.name &&
                                       _playerList.indexWhere((player) =>
                                               player.name.toLowerCase() ==
