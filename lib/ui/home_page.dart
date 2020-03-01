@@ -439,8 +439,8 @@ class _HomePageState extends State<HomePage> {
       return "This is a 4 player game go play tic tac toe";
     } else if (players == 3) {
       return "Guess who the third wheel is";
-    } else if (players > IconAssets.assets.length) {
-      return "Sorry only ${IconAssets.assets.length} players supported for now";
+    } else if (players >= IconAssets.assets.length) {
+      return "Sorry only ${IconAssets.assets.length - 1} players supported for now";
     }
 
     return null;

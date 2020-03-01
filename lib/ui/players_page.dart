@@ -119,6 +119,9 @@ class _PlayersPageState extends State<PlayersPage> {
                                 player.name.toLowerCase() ==
                                 value.toLowerCase()) !=
                             -1) return "Player with given name already exists";
+                        if (_playerList.value.length >=
+                            IconAssets.assets.length)
+                          return "Cannot add anymore players, delete existing ones first";
                         return null;
                       },
                     ),
