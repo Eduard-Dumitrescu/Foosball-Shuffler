@@ -191,20 +191,20 @@ class _HomePageState extends State<HomePage> {
                     curve: Curves.linear,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
-                        Expanded(
+                        Flexible(
                           flex: 1,
                           child: _teamColumn(players[0], players[1],
                               isOnLeftSide: true),
                         ),
-                        Expanded(
+                        Flexible(
                           flex: 2,
                           child: SvgPicture.asset(
                             "assets/ciocioBoard.svg",
                           ),
                         ),
-                        Expanded(
+                        Flexible(
                           flex: 1,
                           child: _teamColumn(players[2], players[3],
                               isOnLeftSide: false),
@@ -226,7 +226,7 @@ class _HomePageState extends State<HomePage> {
 
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Flexible(
                 child: ListTile(
@@ -290,17 +290,29 @@ class _HomePageState extends State<HomePage> {
 
   Widget _teamColumn(Player player1, Player player2,
       {bool isOnLeftSide = true}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Flexible(
+    final EdgeInsets columnMargin = isOnLeftSide
+        ? EdgeInsets.only(
+            top: _teamType.value == TeamType.Numbers ? 40.0 : 56.0)
+        : EdgeInsets.only(
+            bottom: _teamType.value == TeamType.Numbers ? 24.0 : 40.0);
+
+    return Container(
+      margin: columnMargin,
+      child: Column(
+        mainAxisAlignment:
+            isOnLeftSide ? MainAxisAlignment.start : MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Flexible(
             child: _playerWidget(player1.id, player1.icon,
-                name: player1.name, isOnLeftSide: isOnLeftSide)),
-        Flexible(
+                name: player1.name, isOnLeftSide: isOnLeftSide),
+          ),
+          Flexible(
             child: _playerWidget(player2.id, player2.icon,
-                name: player2.name, isOnLeftSide: isOnLeftSide)),
-      ],
+                name: player2.name, isOnLeftSide: isOnLeftSide),
+          ),
+        ],
+      ),
     );
   }
 
@@ -314,36 +326,35 @@ class _HomePageState extends State<HomePage> {
 
   Widget _playerWithNumberWidget(int id, String iconPath,
       {bool isOnLeftSide = true}) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Flexible(
-            child: Transform(
-              alignment: FractionalOffset.center,
-              transform: Matrix4.identity()..rotateY(isOnLeftSide ? 0 : pi),
-              child: AspectRatio(
-                aspectRatio: 3.0 / 4.0,
-                child: SvgPicture.asset(
-                  iconPath,
-                ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Flexible(
+          child: Transform(
+            alignment: FractionalOffset.center,
+            transform: Matrix4.identity()..rotateY(isOnLeftSide ? 0 : pi),
+            child: AspectRatio(
+              aspectRatio: 3.0 / 4.0,
+              child: SvgPicture.asset(
+                iconPath,
               ),
             ),
           ),
-          Flexible(
-            child: Text(
-              "#$id",
-              overflow: TextOverflow.clip,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
+        ),
+        Flexible(
+          child: Text(
+            "#$id",
+            overflow: TextOverflow.clip,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -351,6 +362,7 @@ class _HomePageState extends State<HomePage> {
       {bool isOnLeftSide = true, String name = ""}) {
     return Container(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
