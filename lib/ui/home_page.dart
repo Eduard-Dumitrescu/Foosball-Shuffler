@@ -290,17 +290,20 @@ class _HomePageState extends State<HomePage> {
 
   Widget _teamColumn(Player player1, Player player2,
       {bool isOnLeftSide = true}) {
-    final EdgeInsets columnMargin = isOnLeftSide
-        ? EdgeInsets.only(
-            top: _teamType.value == TeamType.Numbers ? 40.0 : 56.0)
-        : EdgeInsets.only(
-            bottom: _teamType.value == TeamType.Numbers ? 24.0 : 40.0);
+    final EdgeInsets columnMargin = _shrink.value
+        ? const EdgeInsets.all(0.0)
+        : isOnLeftSide
+            ? EdgeInsets.only(
+                top: _teamType.value == TeamType.Numbers ? 40.0 : 56.0)
+            : EdgeInsets.only(
+                bottom: _teamType.value == TeamType.Numbers ? 24.0 : 40.0);
 
     return Container(
       margin: columnMargin,
       child: Column(
-        mainAxisAlignment:
-            isOnLeftSide ? MainAxisAlignment.start : MainAxisAlignment.end,
+        mainAxisAlignment: _shrink.value
+            ? MainAxisAlignment.center
+            : isOnLeftSide ? MainAxisAlignment.start : MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Flexible(
