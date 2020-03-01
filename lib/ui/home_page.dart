@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
   Widget _mainBody() {
     return Container(
       width: Utils.deviceWidth(context),
-      height: Utils.deviceHeight(context),
+      height: Utils.deviceHeightWithoutAppBar(context),
       color: Color(0xff21295C),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -192,8 +192,8 @@ class _HomePageState extends State<HomePage> {
               ? Utils.deviceWidth(context) / 2
               : Utils.deviceWidth(context);
           final double height = shrink
-              ? Utils.deviceHeight(context) / 6
-              : Utils.deviceHeight(context) / 3;
+              ? Utils.deviceHeightWithoutAppBar(context) / 6
+              : Utils.deviceHeightWithoutAppBar(context) / 3;
 
           return ValueListenableBuilder<List<Player>>(
               valueListenable: _players,
@@ -520,7 +520,7 @@ class _PlayerCheckState extends State<PlayerCheck> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: Utils.deviceWidth(context),
-      height: Utils.deviceHeight(context) / 2,
+      height: Utils.deviceHeightWithoutAppBar(context) / 2,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,

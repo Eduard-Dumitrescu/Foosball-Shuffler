@@ -22,7 +22,7 @@ class ContactPage extends StatelessWidget {
       ),
       body: Container(
         width: Utils.deviceWidth(context),
-        height: Utils.deviceHeight(context),
+        height: Utils.deviceHeightWithoutAppBar(context),
         color: Color(0xff21295C),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

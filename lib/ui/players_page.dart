@@ -40,7 +40,7 @@ class _PlayersPageState extends State<PlayersPage> {
         ),
         body: Container(
           width: Utils.deviceWidth(context),
-          height: Utils.deviceHeight(context),
+          height: Utils.deviceHeightWithoutAppBar(context),
           color: Color(0xff21295C),
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -305,7 +305,8 @@ class _PlayerEditWidgetState extends State<PlayerEditWidget> {
             return Container(
               color: Color(0xff21295C),
               width: Utils.deviceWidth(context),
-              height: Utils.deviceHeight(context) / (isMowgli ? 3 : 2),
+              height:
+                  Utils.deviceHeightWithoutAppBar(context) / (isMowgli ? 3 : 2),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,

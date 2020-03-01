@@ -15,6 +15,12 @@ class Utils {
     return Platform.isIOS ? deviceHeight / 2 : deviceHeight;
   }
 
+  static double deviceHeightWithoutAppBar(BuildContext context) {
+    final double deviceHeight =
+        MediaQuery.of(context).size.height - kToolbarHeight;
+    return Platform.isIOS ? deviceHeight / 2 : deviceHeight;
+  }
+
   static bool isKeyboardHidden(BuildContext context) {
     return MediaQuery.of(context).viewInsets.bottom == 0;
   }
