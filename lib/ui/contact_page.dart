@@ -48,7 +48,7 @@ class ContactPage extends StatelessWidget {
             Flexible(
               flex: 1,
               child: Text(
-                "Icons made by Freepik from www.flaticon.com",
+                "Icons made by Freepik from www.flaticon.com \n Icons made by xnimrodx from www.flaticon.com \n Icons made by Icongeek26 from www.flaticon.com",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16),
               ),

@@ -43,23 +43,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _selectChoice(String value) {
-    switch (value) {
-      case "Players Page":
-        {
-          Navigator.pushNamed(context, '/players');
-        }
-        break;
-      case "Contact":
-        {
-          Navigator.pushNamed(context, '/contact');
-        }
-        break;
-    }
-  }
-
-  static List<String> _choices = ["Players Page", "Contact"];
-
   _showPlayersDialog() async {
     await showDialog(
         context: context,
@@ -83,23 +66,24 @@ class _HomePageState extends State<HomePage> {
   Widget _appBar() {
     return AppBar(
       title: Text(widget.title),
-      centerTitle: true,
       actions: <Widget>[
-        PopupMenuButton<String>(
-          color: Color(0xff21295C),
-          onSelected: _selectChoice,
-          itemBuilder: (BuildContext context) {
-            return _choices.map((choice) {
-              return PopupMenuItem<String>(
-                value: choice,
-                child: Row(
-                  children: <Widget>[
-                    Text(choice),
-                  ],
-                ),
-              );
-            }).toList();
-          },
+        InkWell(
+          onTap: () async => Navigator.pushNamed(context, '/players'),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AspectRatio(
+                aspectRatio: 3.0 / 4.0,
+                child: SvgPicture.asset("assets/playerSettings.svg")),
+          ),
+        ),
+        InkWell(
+          onTap: () async => Navigator.pushNamed(context, '/contact'),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AspectRatio(
+                aspectRatio: 3.0 / 4.0,
+                child: SvgPicture.asset("assets/contact.svg")),
+          ),
         ),
       ],
     );
