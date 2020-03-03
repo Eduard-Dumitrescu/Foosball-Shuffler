@@ -4,7 +4,6 @@ import 'package:ciocio_team_generator/models/player.dart';
 import 'package:ciocio_team_generator/repo/player_service.dart';
 import 'package:ciocio_team_generator/utils/icon_assets.dart';
 import 'package:ciocio_team_generator/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';

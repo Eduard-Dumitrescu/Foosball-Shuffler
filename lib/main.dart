@@ -1,7 +1,6 @@
 import 'package:ciocio_team_generator/ui/contact_page.dart';
 import 'package:ciocio_team_generator/ui/home_page.dart';
 import 'package:ciocio_team_generator/ui/players_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_device_type/flutter_device_type.dart';
